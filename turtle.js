@@ -34,7 +34,10 @@
     var r = a % b;
     return r < 0 ? r + b : r;
   }
-
+  
+  var output="";
+  var lastTheta=0.0;
+  
   function CanvasTurtle(canvas_ctx, turtle_ctx, w, h, events) {
     // Stub for old browsers w/ canvas but no text functions
     canvas_ctx.fillText = canvas_ctx.fillText || function fillText(string, x, y) { };
@@ -162,9 +165,65 @@
         ctx.restore();
       }
     }},
+    
+    getOutput: {value: function getOutput() {
+       return output;
+    }},
 
     _moveto: {value: function(x, y, setpos) {
 
+      var startX=this.x/200.0;
+      var startY=this.y/200.0;
+
+      var endX=x/200.0;
+      var endY=y/200.0;
+      
+      var lineLength=Math.hypot(endX-startX, endY-startY);
+      var numDeltas=Math.round( lineLength / .01 );
+      
+      for( var d = 1; d <= numDeltas; d++ ) {
+         var frac = d / numDeltas;
+         
+         var tempX=startX+frac*(endX-startX);
+         var tempY=startY+frac*(endY-startY);
+      
+         var rho=0.0;
+         var theta=0.0;
+      
+         if (tempX!=0.0 || tempY!=0.0){
+            rho = Math.hypot(tempX, tempY);
+            theta = Math.asin(tempX / rho);
+         }
+              
+         if (tempY<0) theta= (theta==0 ? 1 : Math.sign(theta)) * Math.PI - theta;
+ 
+         if (theta<0) theta+=2*Math.PI
+   
+         var lastThetaFloor=Math.floor(lastTheta/(2*Math.PI))*(2*Math.PI);
+         
+         var lastTheoRemainder=lastTheta-lastThetaFloor;
+         
+         if (theta+(2*Math.PI)-lastTheoRemainder<Math.PI){
+             theta=lastThetaFloor + (2*Math.PI) + theta;
+         }
+         else if (lastTheoRemainder + (2*Math.PI) - theta < Math.PI){
+             theta=lastThetaFloor - (2*Math.PI) + theta;
+         }
+         else{
+             theta=lastThetaFloor + theta;
+         }
+         
+         //console.log(theta);
+          
+         //output+=tempX + " " + tempY + " " + theta + " " + rho + "\n"
+         output+=theta + " " + rho + "\n"
+      
+         lastTheta=theta;
+         
+         //console.log(output);
+         //console.log("-----------------");
+      }
+      
       var _go = function(x1, y1, x2, y2) {
         if (this.filling) {
           this.canvas_ctx.lineTo(x1, y1);
@@ -344,9 +403,10 @@
       return 90 - rad2deg(Math.atan2(y - this.y, x - this.x));
     }},
 
-    clearscreen: {value: function() {
+    clearscreen: {value: function() { 
       this.home();
       this.clear();
+      output="";
     }},
 
     clear: {value: function() {
@@ -588,7 +648,7 @@
     button: {
       get: function() { return this._buttons; }
     }
-
+    
   });
 
   global.CanvasTurtle = CanvasTurtle;

@@ -619,6 +619,12 @@ window.addEventListener('DOMContentLoaded', function() {
     if (!saveDataAs(url, 'logo_drawing.png'))
       Dialog.alert("Sorry, not supported by your browser");
   });
+  $('#sisyphus').addEventListener('click', function() {
+      var thr = turtle.getOutput();
+      var url = 'data:text/plain,' + encodeURIComponent(thr);
+      if (!saveDataAs(url, 'sisyphus.thr'))
+        Dialog.alert("Sorry, not supported by your browser");
+  });
   $('#clearhistory').addEventListener('click', function() {
     if (!confirm('Clear history: Are you sure?')) return;
     clearhistoryhook();
