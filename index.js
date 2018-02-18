@@ -722,52 +722,6 @@ window.addEventListener('DOMContentLoaded', function() {
       });
   }());
 
-  // Populate languages selection list
-  fetch('l10n/languages.txt')
-    .then(function(response) {
-      if (!response.ok) throw Error(response.statusText);
-      return response.text();
-    })
-    .then(function(text) {
-      var select = $('#select-lang');
-      text.split(/\r?\n/g).forEach(function(entry) {
-        var match = /^(\w+)\s+(.*)$/.exec(entry);
-        if (!match) return;
-        var opt = document.createElement('option');
-        opt.value = match[1];
-        opt.textContent = match[2];
-        select.appendChild(opt);
-      });
-      select.value = document.body.lang;
-      select.addEventListener('change', function() {
-        var url = String(document.location);
-        url = url.replace(/[\?#].*/, '');
-        document.location = url + '?lang=' + select.value;
-      });
-    });
-
-  localizationComplete.then(initInput);
-
-  //
-  // Populate "Examples" sidebar
-  // (URL may be overwritten by localization file)
-  //
-  localizationComplete.then(function() {
-    fetch(examples)
-      .then(function(response) {
-        if (!response.ok) throw Error(response.statusText);
-        return response.text();
-      })
-      .then(function(text) {
-        var parent = $('#examples');
-        text.split(/\n\n/g).forEach(function(line) {
-          insertSnippet(line, parent, undefined, {
-            noScroll: true
-          });
-        });
-      });
-  });
-
   //
   // Demo
   //
