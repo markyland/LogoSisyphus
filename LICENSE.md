@@ -1,5 +1,6 @@
 Logo in Javascript
 
+Source Code Copyright (C) 2018 markyland
 Source Code Copyright (C) 2009-2013 Joshua Bell
 
 Licensed under the Apache License, Version 2.0 (the "License");

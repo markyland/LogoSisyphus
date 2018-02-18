@@ -1,7 +1,7 @@
 LogoSisyphus - A semi-Logo based implementation for use with Sisyphus Tables
 ===========================
 
-First of all, this implementation is using a ton of code from jslogo which you can find here:
+First of all, this implementation is using a ton of code from jslogo from Joshua Bell which you can find here:
 
 https://github.com/inexorabletash/jslogo
 http://www.calormen.com/jslogo/

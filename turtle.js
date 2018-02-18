@@ -2,6 +2,7 @@
 // Turtle Graphics in Javascript
 //
 
+// Copyright (C) 2018 markyland
 // Copyright (C) 2011 Joshua Bell
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
