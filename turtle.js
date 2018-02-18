@@ -22,6 +22,8 @@
   function deg2rad(d) { return d / 180 * Math.PI; }
   function rad2deg(r) { return r * 180 / Math.PI; }
 
+  var TABLE_SIZE = 250.0;
+
   function font(px, name) {
     px = Number(px);
     name = String(name).toLowerCase();
@@ -64,7 +66,6 @@
     this.pendown = true;
 
     this.was_oob = false;
-    this.filling = 0;
 
     this._clickx = this._clicky = 0;
     this._mousex = this._mousey = 0;
@@ -172,11 +173,11 @@
 
     _moveto: {value: function(x, y, setpos) {
 
-      var startX=this.x/200.0;
-      var startY=this.y/200.0;
+      var startX=this.x/TABLE_SIZE;
+      var startY=this.y/TABLE_SIZE;
 
-      var endX=x/200.0;
-      var endY=y/200.0;
+      var endX=x/TABLE_SIZE;
+      var endY=y/TABLE_SIZE;
       
       var lineLength=Math.hypot(endX-startX, endY-startY);
       var numDeltas=Math.round( lineLength / .01 );
@@ -225,10 +226,7 @@
       }
       
       var _go = function(x1, y1, x2, y2) {
-        if (this.filling) {
-          this.canvas_ctx.lineTo(x1, y1);
-          this.canvas_ctx.lineTo(x2, y2);
-        } else if (this.pendown) {
+        if (this.pendown) {
           this.canvas_ctx.beginPath();
           this.canvas_ctx.moveTo(x1, y1);
           this.canvas_ctx.lineTo(x2, y2);
@@ -406,6 +404,11 @@
     clearscreen: {value: function() { 
       this.home();
       this.clear();
+
+      this.canvas_ctx.beginPath();
+      this.canvas_ctx.arc(this.x, this.y, TABLE_SIZE, this.r, this.r - deg2rad(360), 1);
+      this.canvas_ctx.stroke();
+
       output="";
     }},
 
@@ -435,42 +438,10 @@
       this.canvas_ctx.restore();
     }},
 
-    beginpath: {value: function() {
-      if (this.filling === 0) {
-        this.saved_turtlemode = this.turtlemode;
-        this.turtlemode = 'window';
-        ++this.filling;
-        this.canvas_ctx.beginPath();
-      }
-    }},
-
-    fillpath: {value: function(fillcolor) {
-      --this.filling;
-      if (this.filling === 0) {
-        this.canvas_ctx.closePath();
-        this.canvas_ctx.fillStyle = fillcolor;
-        this.canvas_ctx.fill();
-        this.canvas_ctx.fillStyle = this.color;
-        if (this.pendown)
-          this.canvas_ctx.stroke();
-        this.turtlemode = this.saved_turtlemode;
-      }
-    }},
-
-    fill: {value: function() {
-      this.canvas_ctx.save();
-      this.canvas_ctx.setTransform(1, 0, 0, 1, 0, 0);
-      this.canvas_ctx.floodFill(this.x*this.sx + this.width/2,
-                                - this.y*this.sy + this.height/2);
-      this.canvas_ctx.restore();
-    }},
-
     arc: {value: function(angle, radius) {
-      if (!this.filling)
-        this.canvas_ctx.beginPath();
+      this.canvas_ctx.beginPath();
       this.canvas_ctx.arc(this.x, this.y, radius, this.r, this.r - deg2rad(angle), angle > 0);
-      if (!this.filling)
-        this.canvas_ctx.stroke();
+      this.canvas_ctx.stroke();
     }},
 
     getstate: {value: function() {

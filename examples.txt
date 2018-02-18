@@ -7,27 +7,9 @@ star
 to square :length
   repeat 4 [ fd :length rt 90 ]
 end
-to randomcolor
-  setcolor pick [ red orange yellow green blue violet ]
-end
-clearscreen
-repeat 36 [ randomcolor square random 200 rt 10 ]
-
-clearscreen window hideturtle
-repeat 144 [
-  setlabelheight repcount
-  penup
-  fd repcount * repcount / 30
-  label "Logo
-  bk repcount * repcount / 30
-  pendown
-  rt 10
-  wait 5
-]
-showturtle
 
 to tree :size
-   if :size < 5 [forward :size back :size stop]
+   if :size < 15 [forward :size back :size stop]
    forward :size/3
    left 30 tree :size*2/3 right 30
    forward :size/6
@@ -41,7 +23,7 @@ clearscreen
 tree 150
 
 to fern :size :sign
-  if :size < 1 [ stop ]
+  if :size < 5 [ stop ]
   fd :size
   rt 70 * :sign fern :size * 0.5 :sign * -1 lt 70 * :sign
   fd :size
