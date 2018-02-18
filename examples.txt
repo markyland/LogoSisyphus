@@ -4,11 +4,9 @@ end
 clearscreen
 star
 
-
 to square :length
   repeat 4 [ fd :length rt 90 ]
 end
-
 
 to tree :size
    if :size < 15 [forward :size back :size stop]
@@ -23,7 +21,6 @@ to tree :size
 end
 clearscreen
 tree 150
-
 
 to fern :size :sign
   if :size < 5 [ stop ]
