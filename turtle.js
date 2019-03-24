@@ -181,7 +181,7 @@
       var endY=y/TABLE_SIZE;
       
       var lineLength=Math.hypot(endX-startX, endY-startY);
-      var numDeltas=Math.round( lineLength / .01 );
+      var numDeltas=Math.round( lineLength / .05 );
       
       for( var d = 1; d <= numDeltas; d++ ) {
          var frac = d / numDeltas;
@@ -218,8 +218,11 @@
          //console.log(theta);
           
          //output+=tempX + " " + tempY + " " + theta + " " + rho + "\n"
-         output+=theta + " " + rho + "\n"
-      
+         
+         if (rho<=1.00001){
+	         output+=theta + " " + rho + "\n"
+	 }
+	 
          lastTheta=theta;
          
          //console.log(output);
